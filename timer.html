@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>倒计时器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            padding-top: 80px;
+        }
+        .timer-app {
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .display {
+            font-size: 80px;
+            font-weight: bold;
+            color: #333;
+            margin: 30px 0;
+            font-family: monospace;
+        }
+        .controls input {
+            width: 100px;
+            padding: 10px;
+            font-size: 18px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .controls button {
+            padding: 10px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+        .controls button:first-of-type {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .controls button:last-of-type {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="timer-app">
+    <h1>倒计时</h1>
+    <div class="display" id="display">00:00</div>
+    <div class="controls">
+        <input type="number" id="minutes" placeholder="分钟" min="0">
+        <button onclick="startTimer()">开始</button>
+        <button onclick="resetTimer()">重置</button>
+    </div>
+</div>
+<script>
+    var timerId = null;
+
+    function startTimer() {
+        var minutes = document.getElementById("minutes").value;
+        if (minutes === "" || minutes <= 0) return;
+
+        var totalSeconds = minutes * 60;
+        var display = document.getElementById("display");
+
+        clearInterval(timerId);
+
+        timerId = setInterval(function() {
+            var mins = Math.floor(totalSeconds / 60);
+            var secs = totalSeconds % 60;
+            display.innerHTML =
+                (mins < 10 ? "0" : "") + mins + ":" +
+                (secs < 10 ? "0" : "") + secs;
+
+            if (totalSeconds <= 0) {
+                clearInterval(timerId);
+                display.innerHTML = "时间到！";
+            }
+            totalSeconds--;
+        }, 1000);
+    }
+
+    function resetTimer() {
+        clearInterval(timerId);
+        document.getElementById("display").innerHTML = "00:00";
+        document.getElementById("minutes").value = "";
+    }
+</script>
+</body>
+</html>

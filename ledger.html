@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>记账本</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            padding-top: 50px;
+        }
+        .app {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 400px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .balance {
+            text-align: center;
+            font-size: 36px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .form input, .form select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .form input {
+            flex: 1;
+        }
+        .form button {
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .list {
+            list-style: none;
+        }
+        .list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .income {
+            color: green;
+        }
+        .expense {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <h1>记账本</h1>
+        <div class="balance" id="balance">¥0.00</div>
+        <div class="form">
+            <input type="text" id="desc" placeholder="说明">
+            <input type="number" id="amount" placeholder="金额">
+            <select id="type">
+                <option value="income">收入</option>
+                <option value="expense">支出</option>
+            </select>
+            <button onclick="addRecord()">添加</button>
+        </div>
+        <ul class="list" id="list"></ul>
+    </div>
+
+    <script>
+        var total = 0;
+
+        function addRecord() {
+            var desc = document.getElementById("desc").value;
+            var amount = document.getElementById("amount").value;
+            var type = document.getElementById("type").value;
+
+            if (desc === "" || amount === "") return;
+
+            amount = parseFloat(amount);
+            if (type === "income") {
+                total += amount;
+            } else {
+                total -= amount;
+            }
+
+            document.getElementById("balance").innerHTML = "¥" + total.toFixed(2);
+
+            var li = document.createElement("li");
+            var cls = (type === "income") ? "income" : "expense";
+            var sign = (type === "income") ? "+" : "-";
+            li.innerHTML = desc + " <span class='" + cls + "'>" + sign + "¥" + amount.toFixed(2) + "</span>";
+            document.getElementById("list").appendChild(li);
+
+            document.getElementById("desc").value = "";
+            document.getElementById("amount").value = "";
+        }
+    </script>
+</body>
+</html>
